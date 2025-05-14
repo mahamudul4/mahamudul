@@ -1,0 +1,577 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mahamudul Hasan - Portfolio</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- AOS (Animate on Scroll) -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Font Awesome for Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      color: #333;
+    }
+    .navbar {
+      transition: all 0.3s ease;
+    }
+    .navbar.scrolled {
+      background-color: rgba(255, 255, 255, 0.95);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    .card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: 4px;
+      height: 100%;
+      background: #4f46e5;
+      transform: translateX(-50%);
+    }
+    .timeline-item:nth-child(odd) .card {
+      margin-left: 50%;
+      padding-left: 20px;
+    }
+    .timeline-item:nth-child(even) .card {
+      margin-right: 50%;
+      padding-right: 20px;
+    }
+    @media (max-width: 768px) {
+      .timeline::before {
+        left: 20px;
+      }
+      .timeline-item:nth-child(odd) .card,
+      .timeline-item:nth-child(even) .card {
+        margin-left: 40px;
+        margin-right: 20px;
+        padding-left: 0;
+        padding-right: 0;
+      }
+    }
+    .filter-btn.active {
+      background-color: #4f46e5;
+      color: white;
+    }
+  </style>
+</head>
+<body class="min-h-screen">
+  <!-- Navbar -->
+  <nav class="navbar fixed top-0 w-full z-50 bg-white bg-opacity-80 backdrop-blur-md py-4">
+    <div class="container mx-auto flex justify-between items-center px-6">
+      <h1 class="text-2xl font-bold text-indigo-600">Mahamudul Hasan</h1>
+      <ul class="flex space-x-6">
+        <li><a href="#home" class="text-gray-700 hover:text-indigo-600 transition">Home</a></li>
+        <li><a href="#about" class="text-gray-700 hover:text-indigo-600 transition">About</a></li>
+        <li><a href="#education" class="text-gray-700 hover:text-indigo-600 transition">Education</a></li>
+        <li><a href="#experience" class="text-gray-700 hover:text-indigo-600 transition">Experience</a></li>
+        <li><a href="#skills" class="text-gray-700 hover:text-indigo-600 transition">Skills</a></li>
+        <li><a href="#publications" class="text-gray-700 hover:text-indigo-600 transition">Publications</a></li>
+        <li><a href="#reviewer" class="text-gray-700 hover:text-indigo-600 transition">Reviewer</a></li>
+        <li><a href="#awards" class="text-gray-700 hover:text-indigo-600 transition">Awards</a></li>
+        <li><a href="#contact" class="text-gray-700 hover:text-indigo-600 transition">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section id="home" class="min-h-screen flex items-center justify-center text-center bg-gradient-to-r from-indigo-500 to-purple-600 text-white">
+    <div data-aos="fade-up" data-aos-duration="1000">
+      <h1 class="text-5xl font-bold mb-4">Mahamudul Hasan</h1>
+      <p class="text-xl mb-6">PhD Candidate | Recommender Systems Specialist | Computer Science Researcher</p>
+      <a href="#about" class="bg-white text-indigo-600 px-6 py-3 rounded-full font-semibold hover:bg-indigo-100 transition">Explore My Work</a>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section id="about" class="py-20 bg-white">
+    <div class="container mx-auto px-6">
+      <h2 class="text-4xl font-bold text-center mb-12" data-aos="fade-up">About Me</h2>
+      <div class="flex flex-col md:flex-row items-center">
+        <img src="https://ibb.co/wXf3m4s" alt="Mahamudul Hasan" class="w-64 h-64 rounded-full mb-6 md:mb-0 md:mr-8" data-aos="zoom-in">
+        <div data-aos="fade-left">
+          <p class="text-lg leading-relaxed">
+            I am a PhD candidate in Computer Science at the University of Minnesota, specializing in Recommender Systems and Information Retrieval. With over 8 years of teaching and research experience in Bangladesh, I have served as a Senior Lecturer at East West University and contributed to cutting-edge research in Machine Learning, Computer Vision, and Blockchain. My work has been recognized with awards like the Best Paper at CIIR 2023 and a Publication Reward from East West University. I am passionate about leveraging AI to solve real-world problems and advancing academic research.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Education Section -->
+  <section id="education" class="py-20 bg-gray-100">
+    <div class="container mx-auto px-6">
+      <h2 class="text-4xl font-bold text-center mb-12" data-aos="fade-up">Education</h2>
+      <div class="space-y-8">
+        <div class="card bg-white p-6 rounded-lg shadow-lg" data-aos="fade-right">
+          <h3 class="text-2xl font-semibold">PhD Candidate, Computer Science and Engineering</h3>
+          <p class="text-gray-600">University of Minnesota, Twin Cities, USA, Present</p>
+        </div>
+        <div class="card bg-white p-6 rounded-lg shadow-lg" data-aos="fade-left">
+          <h3 class="text-2xl font-semibold">M.S., Computer Science and Engineering</h3>
+          <p class="text-gray-600">University of Dhaka, Bangladesh, 2014 - 2015</p>
+        </div>
+        <div class="card bg-white p-6 rounded-lg shadow-lg" data-aos="fade-right">
+          <h3 class="text-2xl font-semibold">B.Sc., Computer Science and Engineering</h3>
+          <p class="text-gray-600">University of Dhaka, Bangladesh, 2011 - 2014</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Experience Section -->
+  <section id="experience" class="py-20 bg-white">
+    <div class="container mx-auto px-6">
+      <h2 class="text-4xl font-bold text-center mb-12" data-aos="fade-up">Experience</h2>
+      <div class="relative timeline">
+        <div class="timeline-item mb-12" data-aos="fade-right">
+          <div class="card bg-indigo-50 p-6 rounded-lg shadow-lg">
+            <h3 class="text-2xl font-semibold">PhD Candidate and Research Assistant</h3>
+            <p class="text-gray-600">University of Minnesota, Twin Cities, USA, Present</p>
+            <ul class="list-disc ml-6">
+              <li>Conducting research in Recommender Systems and Information Retrieval.</li>
+              <li>Assisting in teaching and mentoring undergraduate students.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="timeline-item mb-12" data-aos="fade-left">
+          <div class="card bg-indigo-50 p-6 rounded-lg shadow-lg">
+            <h3 class="text-2xl font-semibold">Senior Lecturer (on Study Leave)</h3>
+            <p class="text-gray-600">East West University, Dhaka, Bangladesh, Present</p>
+            <ul class="list-disc ml-6">
+              <li>Developed curricula for AI and Machine Learning courses.</li>
+              <li>Supervised student research projects.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="timeline-item mb-12" data-aos="fade-right">
+          <div class="card bg-indigo-50 p-6 rounded-lg shadow-lg">
+            <h3 class="text-2xl font-semibold">Part-Time Senior Lecturer</h3>
+            <p class="text-gray-600">University of Liberal Arts, Dhaka, Bangladesh, 2024</p>
+            <ul class="list-disc ml-6">
+              <li>Taught advanced topics in Computer Science.</li>
+              <li>Organized workshops on Deep Learning.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="timeline-item mb-12" data-aos="fade-left">
+          <div class="card bg-indigo-50 p-6 rounded-lg shadow-lg">
+            <h3 class="text-2xl font-semibold">Senior Lecturer</h3>
+            <p class="text-gray-600">East West University, Dhaka, Bangladesh, 2019 - 2024</p>
+            <ul class="list-disc ml-6">
+              <li>Led research initiatives in Computer Vision and Blockchain.</li>
+              <li>Moderated the Computer Programming Club (2023 - 2024).</li>
+            </ul>
+          </div>
+        </div>
+        <div class="timeline-item mb-12" data-aos="fade-right">
+          <div class="card bg-indigo-50 p-6 rounded-lg shadow-lg">
+            <h3 class="text-2xl font-semibold">Lecturer</h3>
+            <p class="text-gray-600">East West University, Dhaka, Bangladesh, 2017 - 2019</p>
+            <ul class="list-disc ml-6">
+              <li>Taught introductory programming and data structures.</li>
+              <li>Guided student projects in Machine Learning.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="timeline-item mb-12" data-aos="fade-left">
+          <div class="card bg-indigo-50 p-6 rounded-lg shadow-lg">
+            <h3 class="text-2xl font-semibold">Lecturer</h3>
+            <p class="text-gray-600">United International University, Dhaka, Bangladesh, 2017</p>
+            <ul class="list-disc ml-6">
+              <li>Delivered lectures on algorithms and databases.</li>
+              <li>Contributed to curriculum development.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="timeline-item mb-12" data-aos="fade-right">
+          <div class="card bg-indigo-50 p-6 rounded-lg shadow-lg">
+            <h3 class="text-2xl font-semibold">Lecturer</h3>
+            <p class="text-gray-600">Eastern University, Dhaka, Bangladesh, 2015</p>
+            <ul class="list-disc ml-6">
+              <li>Taught computer science fundamentals.</li>
+              <li>Organized coding bootcamps.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="timeline-item mb-12" data-aos="fade-left">
+          <div class="card bg-indigo-50 p-6 rounded-lg shadow-lg">
+            <h3 class="text-2xl font-semibold">Lecturer</h3>
+            <p class="text-gray-600">Primeasia University, Dhaka, Bangladesh, 2015 - 2017</p>
+            <ul class="list-disc ml-6">
+              <li>Developed teaching materials for programming courses.</li>
+              <li>Mentored students in competitive programming.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Skills Section with Chart.js -->
+  <section id="skills" class="py-20 bg-gray-100">
+    <div class="container mx-auto px-6">
+      <h2 class="text-4xl font-bold text-center mb-12" data-aos="fade-up">Skills</h2>
+      <div class="flex flex-col md:flex-row gap-8">
+        <div class="w-full md:w-1/2" data-aos="zoom-in">
+          <canvas id="skillsChart"></canvas>
+        </div>
+        <div class="w-full md:w-1/2 grid grid-cols-1 sm:grid-cols-2 gap-4" data-aos="fade-left">
+          <div class="card bg-white p-4 rounded-lg shadow-lg">
+            <h3 class="text-xl font-semibold">Languages</h3>
+            <p>English, Bangla</p>
+          </div>
+          <div class="card bg-white p-4 rounded-lg shadow-lg">
+            <h3 class="text-xl font-semibold">Coding</h3>
+            <p>Java, C, Python, R, SQL, XML, JSON, LaTeX, Pine Script, MQL5</p>
+          </div>
+          <div class="card bg-white p-4 rounded-lg shadow-lg">
+            <h3 class="text-xl font-semibold">Databases</h3>
+            <p>MySQL, MongoDB, SQL, SQLite, Microsoft Access, Oracle</p>
+          </div>
+          <div class="card bg-white p-4 rounded-lg shadow-lg">
+            <h3 class="text-xl font-semibold">Web Development</h3>
+            <p>HTML, CSS, JavaScript, Apache Web Server, PHP</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Publications Section -->
+  <section id="publications" class="py-20 bg-white">
+    <div class="container mx-auto px-6">
+      <h2 class="text-4xl font-bold text-center mb-12" data-aos="fade-up">Publications</h2>
+      <div class="flex justify-center mb-8" data-aos="fade-up">
+        <button class="filter-btn px-4 py-2 mx-2 rounded-full bg-gray-200 hover:bg-indigo-600 hover:text-white transition" data-filter="all">All</button>
+        <button class="filter-btn px-4 py-2 mx-2 rounded-full bg-gray-200 hover:bg-indigo-600 hover:text-white transition" data-filter="journal">Journal</button>
+        <button class="filter-btn px-4 py-2 mx-2 rounded-full bg-gray-200 hover:bg-indigo-600 hover:text-white transition" data-filter="conference">Conference</button>
+        <button class="filter-btn px-4 py-2 mx-2 rounded-full bg-gray-200 hover:bg-indigo-600 hover:text-white transition" data-filter="book">Book</button>
+        <button class="filter-btn px-4 py-2 mx-2 rounded-full bg-gray-200 hover:bg-indigo-600 hover:text-white transition" data-filter="arxiv">arXiv</button>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="card publication journal bg-indigo-50 p-6 rounded-lg shadow-lg" data-aos="flip-left">
+          <h3 class="text-xl font-semibold">Framework for Fish Freshness Detection...</h3>
+          <p class="text-gray-600">Journal of Agriculture and Food Research, 2024</p>
+          <a href="https://doi.org/10.1016/j.jafr.2024.101139" class="text-indigo-600 hover:underline">View Publication</a>
+        </div>
+        <div class="card publication journal bg-indigo-50 p-6 rounded-lg shadow-lg" data-aos="flip-left">
+          <h3 class="text-xl font-semibold">An Ensemble Learning Framework...</h3>
+          <p class="text-gray-600">Array, 2025</p>
+          <a href="#" class="text-indigo-600 hover:underline">View Publication</a>
+        </div>
+        <div class="card publication journal bg-indigo-50 p-6 rounded-lg shadow-lg" data-aos="flip-left">
+          <h3 class="text-xl font-semibold">Smartphone Image Dataset for Radish...</h3>
+          <p class="text-gray-600">Data in Brief, 2024</p>
+          <a href="https://doi.org/10.1016/j.dib.2024.111263" class="text-indigo-600 hover:underline">View Publication</a>
+        </div>
+        <div class="card publication conference bg-indigo-50 p-6 rounded-lg shadow-lg" data-aos="flip-left">
+          <h3 class="text-xl font-semibold">Passchain: A Blockchain-Based...</h3>
+          <p class="text-gray-600">IEEE ICBDS, 2024</p>
+          <a href="https://doi.org/10.1109/ICBDS58030.2024.10634662" class="text-indigo-600 hover:underline">View Publication</a>
+        </div>
+        <div class="card publication conference bg-indigo-50 p-6 rounded-lg shadow-lg" data-aos="flip-left">
+          <h3 class="text-xl font-semibold">Advancing Cucumber Disease Detection...</h3>
+          <p class="text-gray-600">CIIR, Springer, 2023</p>
+          <a href="#" class="text-indigo-600 hover:underline">View Publication</a>
+        </div>
+        <div class="card publication book bg-indigo-50 p-6 rounded-lg shadow-lg" data-aos="flip-left">
+          <h3 class="text-xl font-semibold">Ransomware Prevention Strategies...</h3>
+          <p class="text-gray-600">Book, 2024</p>
+          <a href="#" class="text-indigo-600 hover:underline">View Publication</a>
+        </div>
+        <div class="card publication arxiv bg-indigo-50 p-6 rounded-lg shadow-lg" data-aos="flip-left">
+          <h3 class="text-xl font-semibold">Ecors: An Ensembled Clustering...</h3>
+          <p class="text-gray-600">arXiv, 2024</p>
+          <a href="https://arxiv.org/abs/2402.XXXX" class="text-indigo-600 hover:underline">View Publication</a>
+        </div>
+      </div>
+      <div class="text-center mt-8" data-aos="fade-up">
+        <a href="https://scholar.google.com/citations?user=_JitOHQAAAAJ" class="text-indigo-600 hover:underline">View All Publications on Google Scholar</a>
+      </div>
+      <div class="mt-12" data-aos="zoom-in">
+        <h3 class="text-2xl font-bold text-center mb-6">Publication Impact Factors</h3>
+        <canvas id="impactChart"></canvas>
+      </div>
+    </div>
+  </section>
+
+  <!-- Reviewer & Editorial Roles Section -->
+  <section id="reviewer" class="py-20 bg-gray-100">
+    <div class="container mx-auto px-6">
+      <h2 class="text-4xl font-bold text-center mb-12" data-aos="fade-up">Reviewer & Editorial Roles</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="card bg-white p-6 rounded-lg shadow-lg" data-aos="fade-right">
+          <h3 class="text-xl font-semibold">Guest Editor, PLOS One</h3>
+          <p class="text-gray-600">ISSN: 1932-6203, Impact Factor: 2.9, Scopus Q1</p>
+        </div>
+        <div class="card bg-white p-6 rounded-lg shadow-lg" data-aos="fade-left">
+          <h3 class="text-xl font-semibold">Editor & Reviewer, Computer Science Journal</h3>
+          <p class="text-gray-600">ISSN: 1508-2806, Impact Factor: 0.3, Scopus Q3</p>
+        </div>
+        <div class="card bg-white p-6 rounded-lg shadow-lg" data-aos="fade-right">
+          <h3 class="text-xl font-semibold">Editorial Board Member</h3>
+          <p class="text-gray-600">Computer Science and Engineering Research (CSER)</p>
+        </div>
+        <div class="card bg-white p-6 rounded-lg shadow-lg" data-aos="fade-left">
+          <h3 class="text-xl font-semibold">Technical Committee Member & Reviewer</h3>
+          <p class="text-gray-600">10th ICDPA, Phuket, Thailand, 2024</p>
+        </div>
+        <div class="card bg-white p-6 rounded-lg shadow-lg" data-aos="fade-right">
+          <h3 class="text-xl font-semibold">Technical Committee Member</h3>
+          <p class="text-gray-600">11th ICDPA, Jeju Island, South Korea, 2025</p>
+        </div>
+        <div class="card bg-white p-6 rounded-lg shadow-lg" data-aos="fade-left">
+          <h3 class="text-xl font-semibold">Reviewer, ACM Transactions on Information Systems</h3>
+          <p class="text-gray-600">Impact Factor: 5.4, Scopus Q1</p>
+        </div>
+        <div class="card bg-white p-6 rounded-lg shadow-lg" data-aos="fade-right">
+          <h3 class="text-xl font-semibold">Reviewer, IEEE Access</h3>
+          <p class="text-gray-600">Impact Factor: 3.4, Scopus Q1</p>
+        </div>
+        <div class="card bg-white p-6 rounded-lg shadow-lg" data-aos="fade-left">
+          <h3 class="text-xl font-semibold">Reviewer, Engineering Applications of AI</h3>
+          <p class="text-gray-600">Impact Factor: 7.5, Scopus Q1</p>
+        </div>
+        <div class="card bg-white p-6 rounded-lg shadow-lg" data-aos="fade-right">
+          <h3 class="text-xl font-semibold">Reviewer, Applied Soft Computing</h3>
+          <p class="text-gray-600">Impact Factor: 7.2, Scopus Q1</p>
+        </div>
+        <div class="card bg-white p-6 rounded-lg shadow-lg" data-aos="fade-left">
+          <h3 class="text-xl font-semibold">Reviewer, Artificial Intelligence in Medicine</h3>
+          <p class="text-gray-600">Impact Factor: 6.1, Scopus Q1</p>
+        </div>
+        <div class="card bg-white p-6 rounded-lg shadow-lg" data-aos="fade-right">
+          <h3 class="text-xl font-semibold">Reviewer, Heliyon</h3>
+          <p class="text-gray-600">Impact Factor: 3.4, Scopus Q1</p>
+        </div>
+        <div class="card bg-white p-6 rounded-lg shadow-lg" data-aos="fade-left">
+          <h3 class="text-xl font-semibold">Reviewer, Biomedical Signal Processing & Control</h3>
+          <p class="text-gray-600">Impact Factor: 4.9, Scopus Q1</p>
+        </div>
+        <div class="card bg-white p-6 rounded-lg shadow-lg" data-aos="fade-right">
+          <h3 class="text-xl font-semibold">Reviewer, Multimedia Tools and Applications</h3>
+          <p class="text-gray-600">Impact Factor: 3.0, Scopus Q1</p>
+        </div>
+        <div class="card bg-white p-6 rounded-lg shadow-lg" data-aos="fade-left">
+          <h3 class="text-xl font-semibold">Reviewer, Int. Journal of Information Management Data Insights</h3>
+          <p class="text-gray-600">Scopus Q1</p>
+        </div>
+        <div class="card bg-white p-6 rounded-lg shadow-lg" data-aos="fade-right">
+          <h3 class="text-xl font-semibold">Reviewer, Waste Management</h3>
+          <p class="text-gray-600">Impact Factor: 7.1, Scopus Q1</p>
+        </div>
+        <div class="card bg-white p-6 rounded-lg shadow-lg" data-aos="fade-left">
+          <h3 class="text-xl font-semibold">Reviewer, Data in Brief</h3>
+          <p class="text-gray-600">Impact Factor: 1.0, Scopus Q3</p>
+        </div>
+        <div class="card bg-white p-6 rounded-lg shadow-lg" data-aos="fade-right">
+          <h3 class="text-xl font-semibold">Reviewer, Big Data Research</h3>
+          <p class="text-gray-600">Impact Factor: 3.5, Scopus Q1</p>
+        </div>
+        <div class="card bg-white p-6 rounded-lg shadow-lg" data-aos="fade-left">
+          <h3 class="text-xl font-semibold">Reviewer, Journal of Agriculture and Food Research</h3>
+          <p class="text-gray-600">Impact Factor: 4.8, Scopus Q1</p>
+        </div>
+        <div class="card bg-white p-6 rounded-lg shadow-lg" data-aos="fade-right">
+          <h3 class="text-xl font-semibold">Reviewer, Health Professions Education</h3>
+          <p class="text-gray-600">Impact Factor: 4.1, Scopus Q2</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Awards Section -->
+  <section id="awards" class="py-20 bg-gray-100">
+    <div class="container mx-auto px-6">
+      <h2 class="text-4xl font-bold text-center mb-12" data-aos="fade-up">Awards & Recognitions</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div class="card bg-white p-6 rounded-lg shadow-lg" data-aos="fade-right">
+          <h3 class="text-2xl font-semibold">Best Paper Award</h3>
+          <p class="text-gray-600">CIIR 2023, Springer</p>
+          <p>For "Advancing Cucumber Disease Detection in Agriculture through Machine Vision and Drone Technology."</p>
+        </div>
+        <div class="card bg-white p-6 rounded-lg shadow-lg" data-aos="fade-left">
+          <h3 class="text-2xl font-semibold">Publication Reward</h3>
+          <p class="text-gray-600">East West University, 2024</p>
+          <p>Received BDT 82,368 for publication in Journal of Agriculture and Food Research (Q1).</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact" class="py-20 bg-gradient-to-r from-indigo-500 to-purple-600 text-white">
+    <div class="container mx-auto px-6 text-center">
+      <h2 class="text-4xl font-bold mb-12" data-aos="fade-up">Get in Touch</h2>
+      <p class="text-lg mb-4"><i class="fas fa-envelope mr-2"></i>Email: hasan181@umn.edu</p>
+      <p class="text-lg mb-4"><i class="fas fa-globe mr-2"></i>Website: <a href="http://mahamudul.net" class="underline hover:text-indigo-200">mahamudul.net</a></p>
+      <p class="text-lg mb-4"><i class="fab fa-orcid mr-2"></i>ORCID: <a href="https://orcid.org/0000-0002-4311-8688" class="underline hover:text-indigo-200">0000-0002-4311-8688</a></p>
+      <p class="text-lg"><i class="fab fa-google mr-2"></i>Google Scholar: <a href="https://scholar.google.com/citations?user=_JitOHQAAAAJ" class="underline hover:text-indigo-200">View Profile</a></p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-6 bg-gray-800 text-white text-center">
+    <p>© 2025 Mahamudul Hasan. All rights reserved.</p>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    // Initialize AOS
+    AOS.init();
+
+    // Navbar scroll effect
+    window.addEventListener('scroll', () => {
+      const navbar = document.querySelector('.navbar');
+      if (window.scrollY > 50) {
+        navbar.classList.add('scrolled');
+      } else {
+        navbar.classList.remove('scrolled');
+      }
+    });
+
+    // Smooth scrolling for nav links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+          behavior: 'smooth'
+        });
+      });
+    });
+
+    // Skills Chart
+    const skillsCtx = document.getElementById('skillsChart').getContext('2d');
+    new Chart(skillsCtx, {
+      type: 'radar',
+      data: {
+        labels: ['Python', 'Java', 'SQL', 'JavaScript', 'R', 'C'],
+        datasets: [{
+          label: 'Proficiency',
+          data: [95, 90, 85, 80, 75, 70],
+          backgroundColor: 'rgba(79, 70, 229, 0.2)',
+          borderColor: '#4f46e5',
+          borderWidth: 2
+        }]
+      },
+      options: {
+        scales: {
+          r: {
+            beginAtZero: true,
+            max: 100
+          }
+        },
+        plugins: {
+          legend: { position: 'top' }
+        }
+      }
+    });
+
+    // Publication Impact Chart
+    const impactCtx = document.getElementById('impactChart').getContext('2d');
+    new Chart(impactCtx, {
+      type: 'bar',
+      data: {
+        labels: ['Journal of Agriculture', 'Array', 'Data in Brief', 'Heliyon', 'IEEE Access'],
+        datasets: [{
+          label: 'Impact Factor',
+          data: [4.8, 3.0, 1.0, 3.4, 3.4],
+          backgroundColor: 'rgba(79, 70, 229, 0.6)',
+          borderColor: '#4f46e5',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true,
+            title: { display: true, text: 'Impact Factor' }
+          }
+        },
+        plugins: {
+          legend: { position: 'top' }
+        }
+      }
+    });
+
+    // Publication Filter
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const publications = document.querySelectorAll('.publication');
+
+    filterButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const filter = button.getAttribute('data-filter');
+        
+        // Update active button
+        filterButtons.forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+
+        // Filter publications
+        publications.forEach(pub => {
+          if (filter === 'all' || pub.classList.contains(filter)) {
+            pub.style.display = 'block';
+            pub.setAttribute('data-aos', 'flip-left');
+            AOS.refresh();
+          } else {
+            pub.style.display = 'none';
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
