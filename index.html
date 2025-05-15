@@ -451,6 +451,61 @@
     </div>
   </section>
 
+
+  <section id="scholar-stats" class="py-20 bg-gray-100">
+    <div class="container mx-auto px-6">
+      <h2 class="text-4xl font-bold text-center mb-12" data-aos="fade-up">Google Scholar Statistics</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8" id="stats-container">
+        <!-- Data will be injected here -->
+      </div>
+      <div class="mt-8" id="citations-graph">
+        <!-- Citations over years will be injected here -->
+      </div>
+    </div>
+  </section>
+
+<script>
+  // Fetch and display statistics
+  fetch('/scholar_stats.json')
+    .then(response => response.json())
+    .then(data => {
+      const container = document.getElementById('stats-container');
+      container.innerHTML = `
+        <div class="card bg-white p-6 rounded-lg shadow-lg" data-aos="fade-right">
+          <h4 class="text-xl font-semibold">Total Citations</h4>
+          <p class="text-2xl text-center mt-4">${data.total_citations || 'N/A'}</p>
+        </div>
+        <div class="card bg-white p-6 rounded-lg shadow-lg" data-aos="fade-left">
+          <h4 class="text-xl font-semibold">h-index</h4>
+          <p class="text-2xl text-center mt-4">${data.h_index || 'N/A'}</p>
+        </div>
+        <div class="card bg-white p-6 rounded-lg shadow-lg" data-aos="fade-right">
+          <h4 class="text-xl font-semibold">i10-index</h4>
+          <p class="text-2xl text-center mt-4">${data.i10_index || 'N/A'}</p>
+        </div>
+      `;
+
+      // Display citations over years as a simple table
+      const graphContainer = document.getElementById('citations-graph');
+      if (data.citations_over_years && data.citations_over_years.length) {
+        const table = document.createElement('table');
+        table.className = 'w-full text-left border-collapse';
+        const thead = document.createElement('thead');
+        thead.innerHTML = '<tr><th class="border p-2">Year</th><th class="border p-2">Citations</th></tr>';
+        const tbody = document.createElement('tbody');
+        data.citations_over_years.forEach(item => {
+          tbody.innerHTML += `<tr><td class="border p-2">${item.year}</td><td class="border p-2">${item.citations}</td></tr>`;
+        });
+        table.appendChild(thead);
+        table.appendChild(tbody);
+        graphContainer.appendChild(table);
+      } else {
+        graphContainer.innerHTML = '<p class="text-center">No citation data available.</p>';
+      }
+    })
+    .catch(error => console.error('Error loading stats:', error));
+</script>
+
   <!-- Reviewer & Editorial Roles Section -->
   <section id="reviewer" class="py-20 bg-gray-100">
     <div class="container mx-auto px-6">
