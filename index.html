@@ -316,10 +316,11 @@
     </div>
   </section>
 
-  <!-- Publications Section -->
-    <section id="publications" class="py-20 bg-gray-100">
+  <section id="publications" class="py-20 bg-gray-100">
     <div class="container mx-auto px-6">
       <h2 class="text-4xl font-bold text-center mb-12" data-aos="fade-up">Publications</h2>
+
+      <!-- Publication Filters -->
       <div class="flex justify-center mb-8 space-x-4" data-aos="fade-up">
         <button class="filter-btn active bg-indigo-600 text-white px-4 py-2 rounded-lg" data-filter="all">All</button>
         <button class="filter-btn bg-gray-300 text-gray-800 px-4 py-2 rounded-lg" data-filter="journal">Journal</button>
@@ -327,6 +328,8 @@
         <button class="filter-btn bg-gray-300 text-gray-800 px-4 py-2 rounded-lg" data-filter="book">Book</button>
         <button class="filter-btn bg-gray-300 text-gray-800 px-4 py-2 rounded-lg" data-filter="arxiv">arXiv</button>
       </div>
+
+      <!-- Publication List -->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         <div class="card publication journal bg-indigo-50 p-6 rounded-lg shadow-lg" data-aos="flip-left">
           <h3 class="text-xl font-semibold">An Ensemble Learning Framework with Explainable AI for interpretable leaf disease detection</h3>
@@ -406,7 +409,7 @@
         <div class="card publication journal bg-indigo-50 p-6 rounded-lg shadow-lg" data-aos="flip-right">
           <h3 class="text-xl font-semibold">BananaImageBD: A comprehensive banana image dataset for classification of banana varieties and detection of ripeness stages in Bangladesh</h3>
           <p class="text-gray-600">Data in Brief, 2024</p>
-          <a href="#" class="text-indigo-600 hover:underline">View Publication</a>
+          <a href="https://doi.org/10.1016/j.heliyon.2024.e40091" class="text-indigo-600 hover:underline">View Publication</a>
         </div>
         <div class="card publication journal bg-indigo-50 p-6 rounded-lg shadow-lg" data-aos="flip-left">
           <h3 class="text-xl font-semibold">Transforming agri-food value chains in Bangladesh: A practical application of blockchain for traceability and fair pricing</h3>
@@ -440,71 +443,155 @@
         </div>
       </div>
       <div class="text-center mt-8" data-aos="fade-up">
-        <a href="https://scholar.google.com/citations?user=YOUR_GOOGLE_SCHOLAR_ID" class="text-indigo-600 hover:underline text-lg font-semibold">View All Publications on Google Scholar</a>
+        <a href="https://scholar.google.com/citations?user=_Jit0HQAAAAJ" class="text-indigo-600 hover:underline text-lg font-semibold">View All Publications on Google Scholar</a>
       </div>
+
+      <!-- Google Scholar Statistics -->
       <div class="mt-12">
-        <h3 class="text-2xl font-semibold text-center mb-6" data-aos="fade-up">Publication Impact Factors</h3>
-        <div class="w-full h-96" data-aos="zoom-in" data-aos-delay="200">
-          <canvas id="impactChart"></canvas>
+        <h3 class="text-2xl font-semibold text-center mb-6" data-aos="fade-up">Google Scholar Statistics</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12" id="stats-container">
+          <div class="card bg-white p-6 rounded-lg shadow-lg" data-aos="fade-right">
+            <h4 class="text-xl font-semibold text-center">Total Citations</h4>
+            <p class="text-2xl text-center mt-4" id="total-citations">Loading...</p>
+            <p class="text-gray-600 text-center mt-2" id="citations-since-2019">Since 2019: Loading...</p>
+          </div>
+          <div class="card bg-white p-6 rounded-lg shadow-lg" data-aos="fade-up">
+            <h4 class="text-xl font-semibold text-center">h-index</h4>
+            <p class="text-2xl text-center mt-4" id="h-index-total">Loading...</p>
+            <p class="text-gray-600 text-center mt-2" id="h-index-since-2019">Since 2019: Loading...</p>
+          </div>
+          <div class="card bg-white p-6 rounded-lg shadow-lg" data-aos="fade-left">
+            <h4 class="text-xl font-semibold text-center">i10-index</h4>
+            <p class="text-2xl text-center mt-4" id="i10-index-total">Loading...</p>
+            <p class="text-gray-600 text-center mt-2" id="i10-index-since-2019">Since 2019: Loading...</p>
+          </div>
+        </div>
+        <div class="mt-8">
+          <h4 class="text-xl font-semibold text-center mb-4" data-aos="fade-up">Citations Per Year</h4>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse" id="citations-table">
+              <thead>
+                <tr>
+                  <th class="border p-2 bg-indigo-50">Year</th>
+                  <th class="border p-2 bg-indigo-50">Citations</th>
+                </tr>
+              </thead>
+              <tbody id="citations-table-body">
+                <tr>
+                  <td colspan="2" class="border p-2 text-center">Loading...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
+  <script>
+    // Fetch and display Google Scholar statistics
+    fetch('https://mahamudul4.github.io/mahamudul/scholar_stats.json')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok: ' + response.statusText);
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log('Fetched Google Scholar data:', data); // Debug log
 
-  <section id="scholar-stats" class="py-20 bg-gray-100">
-    <div class="container mx-auto px-6">
-      <h2 class="text-4xl font-bold text-center mb-12" data-aos="fade-up">Google Scholar Statistics</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8" id="stats-container">
-        <!-- Data will be injected here -->
-      </div>
-      <div class="mt-8" id="citations-graph">
-        <!-- Citations over years will be injected here -->
-      </div>
-    </div>
-  </section>
+        // Update summary stats
+        document.getElementById('total-citations').textContent = data.citations.total || 'N/A';
+        document.getElementById('citations-since-2019').textContent = `Since 2019: ${data.citations.since_2019 || 'N/A'}`;
+        document.getElementById('h-index-total').textContent = data.h_index.total || 'N/A';
+        document.getElementById('h-index-since-2019').textContent = `Since 2019: ${data.h_index.since_2019 || 'N/A'}`;
+        document.getElementById('i10-index-total').textContent = data.i10_index.total || 'N/A';
+        document.getElementById('i10-index-since-2019').textContent = `Since 2019: ${data.i10_index.since_2019 || 'N/A'}`;
 
-<script>
-  // Fetch and display statistics
-  fetch('/scholar_stats.json')
-    .then(response => response.json())
-    .then(data => {
-      const container = document.getElementById('stats-container');
-      container.innerHTML = `
-        <div class="card bg-white p-6 rounded-lg shadow-lg" data-aos="fade-right">
-          <h4 class="text-xl font-semibold">Total Citations</h4>
-          <p class="text-2xl text-center mt-4">${data.total_citations || 'N/A'}</p>
-        </div>
-        <div class="card bg-white p-6 rounded-lg shadow-lg" data-aos="fade-left">
-          <h4 class="text-xl font-semibold">h-index</h4>
-          <p class="text-2xl text-center mt-4">${data.h_index || 'N/A'}</p>
-        </div>
-        <div class="card bg-white p-6 rounded-lg shadow-lg" data-aos="fade-right">
-          <h4 class="text-xl font-semibold">i10-index</h4>
-          <p class="text-2xl text-center mt-4">${data.i10_index || 'N/A'}</p>
-        </div>
-      `;
+        // Update citations per year table
+        const tableBody = document.getElementById('citations-table-body');
+        tableBody.innerHTML = ''; // Clear loading message
+        if (data.citations_per_year && Object.keys(data.citations_per_year).length > 0) {
+          Object.keys(data.citations_per_year)
+            .sort()
+            .forEach(year => {
+              const row = document.createElement('tr');
+              row.innerHTML = `
+                <td class="border p-2">${year}</td>
+                <td class="border p-2">${data.citations_per_year[year]}</td>
+              `;
+              tableBody.appendChild(row);
+            });
+        } else {
+          tableBody.innerHTML = '<tr><td colspan="2" class="border p-2 text-center">No citation data available.</td></tr>';
+        }
+      })
+      .catch(error => {
+        console.error('Error loading Google Scholar stats:', error);
+        const statsContainer = document.getElementById('stats-container');
+        statsContainer.innerHTML = '<p class="text-center text-red-600 col-span-full">Error loading statistics: ' + error.message + '</p>';
+        const tableBody = document.getElementById('citations-table-body');
+        tableBody.innerHTML = '<tr><td colspan="2" class="border p-2 text-center">Error loading citation data.</td></tr>';
+      });
 
-      // Display citations over years as a simple table
-      const graphContainer = document.getElementById('citations-graph');
-      if (data.citations_over_years && data.citations_over_years.length) {
-        const table = document.createElement('table');
-        table.className = 'w-full text-left border-collapse';
-        const thead = document.createElement('thead');
-        thead.innerHTML = '<tr><th class="border p-2">Year</th><th class="border p-2">Citations</th></tr>';
-        const tbody = document.createElement('tbody');
-        data.citations_over_years.forEach(item => {
-          tbody.innerHTML += `<tr><td class="border p-2">${item.year}</td><td class="border p-2">${item.citations}</td></tr>`;
+    // Publication filter script
+    document.querySelectorAll('.filter-btn').forEach(button => {
+      button.addEventListener('click', () => {
+        const filter = button.getAttribute('data-filter');
+        document.querySelectorAll('.publication').forEach(card => {
+          card.style.display = filter === 'all' || card.classList.contains(filter) ? 'block' : 'none';
         });
-        table.appendChild(thead);
-        table.appendChild(tbody);
-        graphContainer.appendChild(table);
-      } else {
-        graphContainer.innerHTML = '<p class="text-center">No citation data available.</p>';
-      }
-    })
-    .catch(error => console.error('Error loading stats:', error));
-</script>
+        document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active', 'bg-indigo-600', 'text-white'));
+        button.classList.add('active', 'bg-indigo-600', 'text-white');
+      });
+    });
+
+    // Impact chart script (ensure Chart.js is included in your HTML)
+    const impactCtx = document.getElementById('impactChart')?.getContext('2d');
+    if (impactCtx) {
+      const impactChart = new Chart(impactCtx, {
+        type: 'bar',
+        data: {
+          labels: ['Array', 'Data in Brief', 'Intelligent Systems with Applications', 'Land Use Policy', 'BEEI', 'Journal of Agriculture and Food Research', 'Heliyon', 'Int. Journal of Computer Applications & Network Security', 'Vietnam Journal of Computer Science', 'Indonesian Journal of Electrical Engineering and Computer Science', 'Computer Science Journal'],
+          datasets: [{
+            label: 'Impact Factor',
+            data: [3.0, 1.0, 3.5, 5.8, 1.2, 4.8, 3.4, 2.0, 1.5, 1.8, 0.3],
+            backgroundColor: 'rgba(99, 102, 241, 0.6)',
+            borderColor: '#6366f1',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: true,
+              title: {
+                display: true,
+                text: 'Impact Factor'
+              }
+            },
+            x: {
+              title: {
+                display: true,
+                text: 'Journal'
+              }
+            }
+          },
+          plugins: {
+            legend: {
+              position: 'top'
+            }
+          },
+          animation: {
+            duration: 2000,
+            easing: 'easeInOutQuad'
+          }
+        }
+      });
+    }
+  </script>
 
   <!-- Reviewer & Editorial Roles Section -->
   <section id="reviewer" class="py-20 bg-gray-100">
