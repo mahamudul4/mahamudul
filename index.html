@@ -105,6 +105,17 @@
       background-color: #4f46e5;
       color: white;
     }
+    .student-list {
+      column-count: 3;
+      column-gap: 2rem;
+      column-rule: 1px solid #e5e7eb; /* Tailwind's gray-200 */
+    }
+
+    @media (max-width: 768px) {
+      .student-list {
+        column-count: 1;
+      }
+    }
   </style>
 </head>
 <body class="min-h-screen">
@@ -526,7 +537,7 @@
   </section>
 
 
-<section id="collaborators" class="py-20 bg-gray-100">
+  <section id="collaborators" class="py-20 bg-gray-100">
     <div class="container mx-auto px-6">
       <h2 class="text-4xl font-bold text-center mb-12" data-aos="fade-up">Collaborators</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -534,52 +545,60 @@
         <div class="card bg-white p-6 rounded-lg shadow-lg" data-aos="fade-right">
           <h4 class="text-xl font-semibold">Maheen Islam</h4>
           <img src="https://fse.ewubd.edu/storage/app/uploads/public/602/e7b/367/602e7b367acd7439961280.jpg" alt="Maheen Islam" class="w-32 h-32 rounded-full mx-auto mb-4">
+          <p class="text-gray-600 text-center">Associate Professor, Department of Computer Science and Engineering, East West University</p>
         </div>
         <div class="card bg-white p-6 rounded-lg shadow-lg" data-aos="fade-left">
           <h4 class="text-xl font-semibold">Mohammad Rifat Ahmmad Rashid</h4>
           <img src="https://fse.ewubd.edu/storage/app/uploads/public/64b/517/679/64b5176796ce4173333910.jpg" alt="Mohammad Rifat Ahmmad Rashid" class="w-32 h-32 rounded-full mx-auto mb-4">
+          <p class="text-gray-600 text-center">Associate Professor, Department of Computer Science and Engineering, East West University</p>
         </div>
         <div class="card bg-white p-6 rounded-lg shadow-lg" data-aos="fade-right">
           <h4 class="text-xl font-semibold">Md Sawkat Ali</h4>
           <img src="https://fse.ewubd.edu/storage/app/uploads/public/5d0/f34/609/5d0f34609b1dd641351606.jpg" alt="Md Sawkat Ali" class="w-32 h-32 rounded-full mx-auto mb-4">
+          <p class="text-gray-600 text-center">Associate Professor, Department of Computer Science and Engineering, East West University</p>
         </div>
-        <div class="card bg-white p-6 rounded-lg shadow-lg" data-aos="fade-left">
-          <h4 class="text-xl font-semibold">Mujahidul Islam</h4>
-          <img src="path/to/mujahidul.jpg" alt="Mujahidul Islam" class="w-32 h-32 rounded-full mx-auto mb-4">
-        </div>
-        <div class="card bg-white p-6 rounded-lg shadow-lg" data-aos="fade-right">
-          <h4 class="text-xl font-semibold">Nishat Vasker</h4>
-          <img src="path/to/nishat.jpg" alt="Nishat Vasker" class="w-32 h-32 rounded-full mx-auto mb-4">
-        </div>
-        <div class="card bg-white p-6 rounded-lg shadow-lg" data-aos="fade-left">
-          <h4 class="text-xl font-semibold">Krittika Roy</h4>
-          <img src="path/to/krittika.jpg" alt="Krittika Roy" class="w-32 h-32 rounded-full mx-auto mb-4">
-        </div>
-        <div class="card bg-white p-6 rounded-lg shadow-lg" data-aos="fade-right">
-          <h4 class="text-xl font-semibold">Nowshin Tasnia</h4>
-          <img src="path/to/nowshin.jpg" alt="Nowshin Tasnia" class="w-32 h-32 rounded-full mx-auto mb-4">
-        </div>
-        <h3 class="text-2xl font-semibold mt-12 mb-6 col-span-full">Previous Collaborators</h3>
         <div class="card bg-white p-6 rounded-lg shadow-lg" data-aos="fade-left">
           <h4 class="text-xl font-semibold">Sheikh Muhammad Sarwar</h4>
+          <img src="https://people.cs.umass.edu/~smsarwar/image_new.jpg" alt="Sheikh Muhammad Sarwar" class="w-32 h-32 rounded-full mx-auto mb-4">
+          <p class="text-gray-600 text-center">Applied Scientist, Amazon</p>
         </div>
         <div class="card bg-white p-6 rounded-lg shadow-lg" data-aos="fade-right">
           <h4 class="text-xl font-semibold">Surajit Das Barman</h4>
+          <img src="path/to/surajit.jpg" alt="Surajit Das Barman" class="w-32 h-32 rounded-full mx-auto mb-4">
+          <p class="text-gray-600 text-center">Researcher</p>
         </div>
         <div class="card bg-white p-6 rounded-lg shadow-lg" data-aos="fade-left">
           <h4 class="text-xl font-semibold">Shibbir Ahmed</h4>
+          <img src="https://shibbirtanvin.github.io/img/shibbir.png" alt="Shibbir Ahmed" class="w-32 h-32 rounded-full mx-auto mb-4">
+          <p class="text-gray-600 text-center">Assistant Professor, Department of Computer Science, Texas State University</p>
         </div>
         <div class="card bg-white p-6 rounded-lg shadow-lg" data-aos="fade-right">
           <h4 class="text-xl font-semibold">Falguni Roy</h4>
+          <img src="https://www.nstu.edu.bd/assets/images/avatar/0zZGkCk4fE1593278489.jpg" alt="Falguni Roy" class="w-32 h-32 rounded-full mx-auto mb-4">
+          <p class="text-gray-600 text-center">Researcher</p>
+        </div>
+        <div class="card bg-white p-6 rounded-lg shadow-lg" data-aos="fade-right">
+          <h4 class="text-xl font-semibold">Taskeed Jabid</h4>
+          <img src="https://fse.ewubd.edu/storage/app/uploads/public/5d0/f21/3cb/5d0f213cb74a8248072871.jpg" alt="Taskeed Jabid" class="w-32 h-32 rounded-full mx-auto mb-4">
+          <p class="text-gray-600 text-center">Professor, Department of Computer Science and Engineering, East West University</p>
         </div>
         <div class="card bg-white p-6 rounded-lg shadow-lg" data-aos="fade-left">
-          <h4 class="text-xl font-semibold">Tasdikul Islam</h4>
+          <h4 class="text-xl font-semibold">Sultan Ahmad</h4>
+          <img src="https://scholar.googleusercontent.com/citations?view_op=medium_photo&user=pEs2w_cAAAAJ&citpid=8" alt="Sultan Ahmad" class="w-32 h-32 rounded-full mx-auto mb-4">
+          <p class="text-gray-600 text-center">Professor, College of Computer Engineering and Sciences, Prince Sattam Bin Abdulaziz University, Saudi Arabia</p>
+        </div>
+        <div class="card bg-white p-6 rounded-lg shadow-lg" data-aos="fade-right">
+          <h4 class="text-xl font-semibold">Dmitry Ignatov</h4>
+          <img src="https://scholar.googleusercontent.com/citations?view_op=medium_photo&user=iExWnWsAAAAJ&citpid=3" alt="Dmitry Ignatov" class="w-32 h-32 rounded-full mx-auto mb-4">
+          <p class="text-gray-600 text-center">Associate Professor, MMCP Lab Head, Computer Science Faculty, Higher School of Economics</p>
         </div>
         <h3 class="text-2xl font-semibold mt-12 mb-6 col-span-full">Mentorship & Supervision</h3>
-        <div class="card bg-white p-6 rounded-lg shadow-lg" data-aos="fade-up">
+        <div class="card bg-white p-6 rounded-lg shadow-lg col-span-full" data-aos="fade-up">
           <h4 class="text-xl font-semibold">Supervised B.Sc. Students</h4>
           <p class="text-gray-600">I have supervised 36 B.Sc. students in their research projects, leading to publications in reputable journals and conferences. Notable supervisees include:</p>
-          <ul class="list-disc list-inside mt-2">
+          <ul class="student-list list-disc list-inside mt-2">
+            <li>Mujahidul Islam</li>
+            <li>Nishat Vasker</li>
             <li>Tawsif Rahman Omi</li>
             <li>Akibul Huq</li>
             <li>Raiyan Gani</li>
